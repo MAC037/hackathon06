@@ -131,7 +131,45 @@ def check_age_group(obs_dic):
     else:
         return False, f"Invalid Age Group: {age_group}. It should be one of {valid_age_groups}"
         
+def check_severity(obs_dic):
+    #Check if the APR Severity of Illness Code is valid."""
+    key = "APR Severity of Illness Code"
+    if key not in set(obs_dic.keys()):
+        return False, f" {key} is missing."
+    valid_age_groups = {'0', '1', '2', '3', '4'}  # Allowed values
+    severity = obs_dic[key]  # Extract value
+    if severity in valid_age_groups:
+        return True, ""
+    else:
+        return False, f"Invalid Age Group: {severity}. It should be one of {valid_age_groups}."
 
+
+def check_abortion_indicator(obs_dic):
+    """Check if the 'Age Group' in the dictionary is valid."""
+    key = "Abortion Edit Indicator"  # Define the key to check
+    if key not in set(obs_dic.keys()):
+        return False, f" {key} is missing."
+    valid_age_groups = {'y', 'n'}  # Allowed values
+    indicator = obs_dic[key]  # Extract value
+    if indicator.lower() in valid_age_groups:
+        return True, ""
+    else:
+        return False, f"Invalid Age Group: {indicator}. It should be one of {valid_age_groups}."
+        
+def check_emergency(obs_dic):
+    """Check if the 'Age Group' in the dictionary is valid."""
+    key = "Emergency Department Indicator"  # Define the key to check
+    if key not in set(obs_dic.keys()):
+        return False, f" {key} is missing."
+    valid_age_groups = {'y', 'n'}  # Allowed values
+    indicator = obs_dic[key]  # Extract value
+    if indicator.lower() in valid_age_groups:
+        return True, ""
+    else:
+        return False, f"Invalid Age Group: {indicator}. It should be one of {valid_age_groups}."
+
+
+        
 '''
 def check_request(request):
     """
@@ -313,6 +351,23 @@ def predict():
         response = {'error': error}
         return jsonify(response)
         
+    request_ok, error = check_severity(obs_dict)
+    if not request_ok:
+        response = {'error': error}
+        return jsonify(response)
+
+    request_ok, error = check_abortion_indicator(obs_dict)
+    if not request_ok:
+        response = {'error': error}
+        return jsonify(response)
+
+        request_ok, error = check_emergency(obs_dict)
+    if not request_ok:
+        response = {'error': error}
+        return jsonify(response)
+
+
+    
     '''
     request_ok, error = check_request(obs_dict)
     if not request_ok:
