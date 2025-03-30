@@ -254,7 +254,7 @@ def predict():
         return jsonify(response)
 '''
     obs = pd.DataFrame([observation], columns=columns).astype(dtypes)
-    proba = pipeline.predict_proba(obs)[0, 1]
+    #proba = pipeline.predict_proba(obs)[0, 1] #here we are not working with a binomial target
     prediction = pipeline.predict(obs)[0] #here it's automatically applied threshold 0.5 we can change it by recalculating the prediction from proba (i.e. >0,6)
     response = {'observation_id':_id,'prediction': int(prediction)} #here giving different field names in the response compared to the DB, just for the assert
     p = Prediction(
@@ -277,9 +277,9 @@ def update():
     obs = request.get_json()
     try:
         p = Prediction.get(Prediction.observation_id == obs['observation_id'])
-        p.true_class = obs['true_value']
+        p.true_value = obs['true_value']
         p.save()
-        return jsonify(model_to_dict(p))
+        return jsonify({"observation_id": p.observation_id, "true_value": p.true_value})
     except Prediction.DoesNotExist:
         error_msg = 'Observation ID: "{}" does not exist'.format(obs['observation_id'])
         return jsonify({'error': error_msg})
