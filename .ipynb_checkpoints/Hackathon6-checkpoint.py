@@ -23,7 +23,7 @@ DB = connect(os.environ.get('DATABASE_URL') or 'sqlite:///hackathon6.db')
 class Prediction(Model):
     observation_id = UUIDField(default=uuid.uuid4, unique=True) #was observation_id=IntegerField(unique=True) but requests were failing . not being integer
     observation = TextField()
-    proba = FloatField()
+    prediction = IntegerField()
     true_class = IntegerField(null=True)
 
     class Meta:
@@ -256,10 +256,10 @@ def predict():
     obs = pd.DataFrame([observation], columns=columns).astype(dtypes)
     proba = pipeline.predict_proba(obs)[0, 1]
     prediction = pipeline.predict(obs)[0] #here it's automatically applied threshold 0.5 we can change it by recalculating the prediction from proba (i.e. >0,6)
-    response = {'prediction': bool(prediction), 'probability': proba} #here giving different field names in the response compared to the DB, just for the assert
+    response = {'observation_id':_id,'prediction': int(prediction)} #here giving different field names in the response compared to the DB, just for the assert
     p = Prediction(
         observation_id=_id,
-        proba=proba,
+        prediction=prediction,
         observation=request.data,
     )
     try:
