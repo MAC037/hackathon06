@@ -44,7 +44,7 @@ with open(os.path.join('pickles', 'columns.json')) as fh:
     columns = json.load(fh)
 
 
-with open(os.path.join('pickles', 'pipeline.pickle'), 'rb') as fh:
+with open(os.path.join('pickles', 'hack06_pipeline.pickle'), 'rb') as fh:
     pipeline = joblib.load(fh)
 
 
