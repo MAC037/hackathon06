@@ -58,6 +58,80 @@ with open(os.path.join('pickles', 'dtypes.pickle'), 'rb') as fh:
 ########################################
 # Input validation functions
 
+def check_valid_column(obs_dic):
+    """
+        Validates that our observation only has valid columns
+        Returns:
+        - assertion value: True if all provided columns are valid, False otherwise
+        - error message: empty if all provided columns are valid, False otherwise
+    """
+    valid_columns = {"observation_id",
+    "Health Service Area",
+    "Hospital County",
+    "Operating Certificate Number",
+    "Facility Id",
+    "Facility Name",
+    "Age Group",
+    "Zip Code - 3 digits",
+    "Gender",
+    "Race",
+    "Ethnicity",
+    "Type of Admission",
+    "CCS Diagnosis Code",
+    "CCS Diagnosis Description",
+    "CCS Procedure Code",
+    "CCS Procedure Description",
+    "APR DRG Code",
+    "APR DRG Description",
+    "APR MDC Code",
+    "APR MDC Description",
+    "APR Severity of Illness Code",
+    "APR Severity of Illness Description",
+    "APR Risk of Mortality",
+    "APR Medical Surgical Description",
+    "Payment Typology 1",
+    "Payment Typology 2",
+    "Payment Typology 3",
+    "Attending Provider License Number",
+    "Operating Provider License Number",
+    "Other Provider License Number",
+    "Birth Weight",
+    "Abortion Edit Indicator",
+    "Emergency Department Indicator"}
+    keys = set(obs_dic.keys())
+    if len(valid_columns - keys) > 0:
+        missing = valid_columns - keys
+        error = "Missing columns: {}".format(missing)
+        return False, error
+    if len(keys - valid_columns) > 0:
+        extra = keys - valid_columns
+        error = "Unrecognized columns provided: {}".format(extra)
+        return False, error
+    return True, ""
+    
+def check_zip_code(obs_dic):
+    key = 'Zip Code - 3 digits'
+    zip_code = str(obs_dic[key])
+    if key not in data:
+        return False, f" {key} is missing."
+    if len(zip_code) == 3:
+        return True, ""
+    else:
+        return False, f"Invalid Zip Code: {zip_code}. It should be a 3-digit number."
+        
+def check_age_group(obs_dic):
+    """Check if the 'Age Group' in the dictionary is valid."""
+    key = "Age Group"  # Define the key to check
+    if key not in data:
+        return False, f" {key} is missing."
+    valid_age_groups = {"0 to 17", "18 to 29", "30 to 49", "50 to 69", "70 or Older"}  # Allowed values
+    age_group = obs_dic[key]  # Extract value
+    if age_group in valid_age_groups:
+        return True, ''
+    else:
+        return False, f"Invalid Age Group: {age_group}. It should be one of {valid_age_groups}"
+        
+
 '''
 def check_request(request):
     """
@@ -221,7 +295,24 @@ def predict():
                 validations_obs_dict[key] = float(validations_obs_dict[key])
             except ValueError:
                 validations_obs_dict[key] = None  # Handle invalid float values
-                
+
+    #Validations
+
+    request_ok, error = check_valid_column(obs_dict)
+    if not request_ok:
+        response = {'error': error}
+        return jsonify(response)
+
+    request_ok, error = check_zip_code(obs_dict)
+    if not request_ok:
+        response = {'error': error}
+        return jsonify(response)
+
+    request_ok, error = check_age_group(obs_dict)
+    if not request_ok:
+        response = {'error': error}
+        return jsonify(response)
+        
     '''
     request_ok, error = check_request(obs_dict)
     if not request_ok:
