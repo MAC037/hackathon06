@@ -24,7 +24,7 @@ class Prediction(Model):
     observation_id = UUIDField(default=uuid.uuid4, unique=True) #was observation_id=IntegerField(unique=True) but requests were failing . not being integer
     observation = TextField()
     prediction = IntegerField()
-    true_class = IntegerField(null=True)
+    true_value = IntegerField(null=True)
 
     class Meta:
         database = DB
@@ -277,7 +277,7 @@ def update():
     obs = request.get_json()
     try:
         p = Prediction.get(Prediction.observation_id == obs['observation_id'])
-        p.true_class = obs['true_class']
+        p.true_class = obs['true_value']
         p.save()
         return jsonify(model_to_dict(p))
     except Prediction.DoesNotExist:
