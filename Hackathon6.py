@@ -136,12 +136,12 @@ def check_severity(obs_dic):
     key = "APR Severity of Illness Code"
     if key not in set(obs_dic.keys()):
         return False, f" {key} is missing."
-    valid_age_groups = {'0', '1', '2', '3', '4'}  # Allowed values
+    valid_age_groups = {0, 1, 2, 3, 4}  # Allowed values
     severity = obs_dic[key]  # Extract value
     if severity in valid_age_groups:
         return True, ""
     else:
-        return False, f"Invalid Age Group: {severity}. It should be one of {valid_age_groups}."
+        return False, f"APR Severity of Illness Code: {severity}. It should be one of {valid_age_groups}."
 
 
 def check_abortion_indicator(obs_dic):
@@ -154,7 +154,7 @@ def check_abortion_indicator(obs_dic):
     if indicator.lower() in valid_age_groups:
         return True, ""
     else:
-        return False, f"Invalid Age Group: {indicator}. It should be one of {valid_age_groups}."
+        return False, f"Invalid Abortion Edit Indicator: {indicator}. It should be one of {valid_age_groups}."
         
 def check_emergency(obs_dic):
     """Check if the 'Age Group' in the dictionary is valid."""
@@ -166,7 +166,7 @@ def check_emergency(obs_dic):
     if indicator.lower() in valid_age_groups:
         return True, ""
     else:
-        return False, f"Invalid Age Group: {indicator}. It should be one of {valid_age_groups}."
+        return False, f"Emergency Department Indicator: {indicator}. It should be one of {valid_age_groups}."
 
 
         
