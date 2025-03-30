@@ -112,7 +112,7 @@ def check_valid_column(obs_dic):
 def check_zip_code(obs_dic):
     key = 'Zip Code - 3 digits'
     zip_code = str(obs_dic[key])
-    if key not in data:
+    if key not in set(obs_dic.keys()):
         return False, f" {key} is missing."
     if len(zip_code) == 3:
         return True, ""
@@ -122,7 +122,7 @@ def check_zip_code(obs_dic):
 def check_age_group(obs_dic):
     """Check if the 'Age Group' in the dictionary is valid."""
     key = "Age Group"  # Define the key to check
-    if key not in data:
+    if key not in set(obs_dic.keys()):
         return False, f" {key} is missing."
     valid_age_groups = {"0 to 17", "18 to 29", "30 to 49", "50 to 69", "70 or Older"}  # Allowed values
     age_group = obs_dic[key]  # Extract value
